@@ -6,7 +6,6 @@ import com.funa.jobs.dto.SimpleContainerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -102,22 +101,16 @@ public class JobController {
   @Operation(summary = "지정한 Job을 수동으로 시작")
   @PostMapping("/{jobId}/start")
   public ResponseEntity<JobResponse> start(@PathVariable UUID jobId) {
-    JobResponse res = JobResponse.builder()
-        .id(jobId)
-        .status("RUNNING")
-        .startTime(OffsetDateTime.now())
-        .build();
-    return ResponseEntity.ok(res);
+    return jobService.start(jobId)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @Operation(summary = "실행 중인 Job을 수동으로 중지")
   @PostMapping("/{jobId}/stop")
   public ResponseEntity<JobResponse> stop(@PathVariable UUID jobId) {
-    JobResponse res = JobResponse.builder()
-        .id(jobId)
-        .status("STOPPED")
-        .endTime(OffsetDateTime.now())
-        .build();
-    return ResponseEntity.ok(res);
+    return jobService.stop(jobId)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

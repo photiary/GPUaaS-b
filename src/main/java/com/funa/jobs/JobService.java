@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,29 @@ public class JobService {
 
   public void delete(UUID id) {
     repository.deleteById(id);
+  }
+
+  @Transactional
+  public Optional<JobResponse> start(UUID id) {
+    return repository.findById(id).map(e -> {
+      e.setStatus(Job.Status.RUNNING);
+      if (e.getStartTime() == null) {
+        e.setStartTime(OffsetDateTime.now());
+      }
+      e.setEndTime(null);
+      Job saved = repository.save(e);
+      return toResponse(saved);
+    });
+  }
+
+  @Transactional
+  public Optional<JobResponse> stop(UUID id) {
+    return repository.findById(id).map(e -> {
+      e.setStatus(Job.Status.STOPPED);
+      e.setEndTime(OffsetDateTime.now());
+      Job saved = repository.save(e);
+      return toResponse(saved);
+    });
   }
 
   private Job toEntityForCreate(JobRequest req) {
