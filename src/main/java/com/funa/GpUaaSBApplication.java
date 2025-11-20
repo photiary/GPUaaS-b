@@ -8,13 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class SpringBootStarterKitApplication {
+public class GpUaaSBApplication {
 
   private static final Logger logger =
-      LoggerFactory.getLogger(SpringBootStarterKitApplication.class);
+      LoggerFactory.getLogger(GpUaaSBApplication.class);
 
   public static void main(String[] args) {
-    SpringApplication.run(SpringBootStarterKitApplication.class, args);
+    SpringApplication.run(GpUaaSBApplication.class, args);
   }
 
   @Bean
