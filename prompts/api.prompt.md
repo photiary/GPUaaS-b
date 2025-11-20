@@ -1,6 +1,6 @@
 # 🧩 Jobs
 
-## 🎈 Job CRUD
+## [x] 🎈 Job CRUD
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
@@ -9,7 +9,7 @@
 | `PUT` | `/api/jobs/{jobId}` | Job 수정 |
 | `DELETE` | `/api/jobs/{jobId}` | Job 삭제 |
 
-## 🎈 Job list
+## [x] 🎈 Job list
 
 | Method | Endpoint | Description |
 | --- | --- | --- |

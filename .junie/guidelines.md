@@ -15,8 +15,6 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
   version).
 - **PostgresSQL:** Use the 16.x stable version.
 
-# Excluded Technologies
-
 # Excluded Prompt
 
 - Ignore the `.prompt.md` resources defined in `./prompt.ignore`.

@@ -4,7 +4,7 @@
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
 			<includeMdcKeyName>userId</includeMdcKeyName>
 			<includeMdcKeyName>traceId</includeMdcKeyName>
-			<customFields>{"application":"${spring.application.name:-spring-boot-starter-kit}"}
+			<customFields>{"application":"${spring.application.name:-GPUaaS-b}"}
 			</customFields>
 		</encoder>
 	</appender>
@@ -18,7 +18,7 @@
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
 			<includeMdcKeyName>userId</includeMdcKeyName>
 			<includeMdcKeyName>traceId</includeMdcKeyName>
-			<customFields>{"application":"${spring.application.name:-spring-boot-starter-kit}"}
+			<customFields>{"application":"${spring.application.name:-GPUaaS-b}"}
 			</customFields>
 		</encoder>
 	</appender>

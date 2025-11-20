@@ -28,14 +28,23 @@ public class SecurityConfig {
     http.authorizeHttpRequests(
             authorize ->
                 authorize
-                    .requestMatchers("/api/demo/**")
-                    .permitAll() // Allow access to /api/demo/** without authentication
-                    .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
-                    .permitAll() // Allow access to Swagger UI and OpenAPI endpoints
+                    // Allow demo APIs without authentication
+                    .requestMatchers("/api/**")
+                    .permitAll()
+                    // Allow Swagger UI and OpenAPI endpoints
+                    .requestMatchers(
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/api-docs/**"
+                    )
+                    .permitAll()
+                    // All other endpoints require authentication
                     .anyRequest()
-                    .authenticated() // Require authentication for all other endpoints
+                    .authenticated()
             )
-        .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for simplicity in this demo
+        // Disable CSRF for simplicity in this demo and to allow Swagger UI to work without CSRF tokens
+        .csrf(AbstractHttpConfigurer::disable);
 
     return http.build();
   }

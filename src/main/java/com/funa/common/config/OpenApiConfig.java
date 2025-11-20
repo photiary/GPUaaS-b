@@ -29,7 +29,7 @@ public class OpenApiConfig {
                         .version("v1.0.0")
                         .contact(new Contact()
                                 .name("Funa")
-                                .url("https://github.com/funa/spring-boot-starter-kit")
+                                .url("https://github.com/photiary/GPUaaS-b")
                                 .email("contact@funa.com"))
                         .license(new License()
                                 .name("MIT License")
