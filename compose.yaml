@@ -7,3 +7,8 @@ services:
       - 'POSTGRES_USER=myuser'
     ports:
       - '52945:5432'
+  redis:
+    image: 'redis:7-alpine'
+    ports:
+      - '6379:6379'
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
