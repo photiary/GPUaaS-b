@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 /**
  * Spring @Scheduled tasks that trigger agent workflows as shown in the sequence diagrams.
@@ -26,7 +28,7 @@ public class SchedulerTasks {
     /**
      * 주기적으로 전체 Job 상태 모니터링을 수행 (StateMonitorAgent)
      */
-    @Scheduled(fixedDelayString = "${agents.state.fixed-delay:5000}")
+    @Scheduled(fixedDelayString = "${agents.state.fixed-delay:1000}")
     public void scheduleStateMonitoring() {
         log.trace("[Scheduler] scheduleStateMonitoring tick");
         stateMonitorAgent.startAll();
@@ -36,12 +38,13 @@ public class SchedulerTasks {
      * 주기적으로 RUNNING Job의 메트릭 수집을 수행 (MetricsCollectorAgent)
      * 현재는 컨테이너 ID를 별도 저장소에서 조회하지 않아 빈 리스트로 전달합니다.
      */
-    @Scheduled(fixedDelayString = "${agents.metrics.fixed-delay:5000}")
+    @Scheduled(fixedDelayString = "${agents.metrics.fixed-delay:1000}")
+    @Transactional(readOnly = true)
     public void scheduleMetricsCollection() {
         log.trace("[Scheduler] scheduleMetricsCollection tick");
-        jobRepository.findByStatus(Job.Status.RUNNING).forEach(job -> {
-            String jobId = job.getId().toString();
-            metricsCollectorAgent.start(jobId, Collections.emptyList());
-        });
+        for (UUID id : jobRepository.findIdsByStatus(Job.Status.RUNNING)) {
+            // 클래스 다이어그램의 start(jobId) 시그니처 사용
+            metricsCollectorAgent.start(id.toString());
+        }
     }
 }

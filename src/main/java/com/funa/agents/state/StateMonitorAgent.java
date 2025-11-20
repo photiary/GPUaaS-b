@@ -4,6 +4,7 @@ import com.funa.jobs.Job;
 import com.funa.jobs.JobRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,10 +31,11 @@ public class StateMonitorAgent {
         log.info("StateMonitorAgent stopAll() invoked");
     }
 
+    @Transactional(readOnly = true)
     protected List<String> getActiveJobIds() {
         try {
-            return jobRepository.findByStatus(Job.Status.RUNNING).stream()
-                    .map(j -> j.getId().toString())
+            return jobRepository.findIdsByStatus(Job.Status.RUNNING).stream()
+                    .map(java.util.UUID::toString)
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.warn("Failed to load active jobs. Fallback to empty list.", e);

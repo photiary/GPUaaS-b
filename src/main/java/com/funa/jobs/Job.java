@@ -27,6 +27,7 @@ public class Job {
   private String name;
 
   @Lob
+  @Basic(fetch = FetchType.LAZY)
   @Column(name = "description")
   private String description;
 
@@ -53,6 +54,7 @@ public class Job {
   private Integer requestedMemory;
 
   @Lob
+  @Basic(fetch = FetchType.LAZY)
   @Column(name = "metadata")
   private String metadata; // JSON string
 

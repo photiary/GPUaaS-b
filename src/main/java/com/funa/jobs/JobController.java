@@ -20,9 +20,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class JobController {
 
   private final JobService jobService;
+  private final MetricsSseService metricsSseService;
 
-  public JobController(JobService jobService) {
+  public JobController(JobService jobService, MetricsSseService metricsSseService) {
     this.jobService = jobService;
+    this.metricsSseService = metricsSseService;
   }
 
   @Operation(summary = "새 Job 생성")
@@ -90,12 +92,9 @@ public class JobController {
   }
 
   @Operation(summary = "특정 Job의 컨테이너 메트릭스 실시간 모니터링 (SSE)")
-  @GetMapping("/{jobId}/containers/metrics")
-  public SseEmitter monitorContainerMetrics(@PathVariable UUID jobId) throws IOException {
-    SseEmitter emitter = new SseEmitter(0L);
-    emitter.send(SseEmitter.event().name("metrics").data("cpu=10,gpu=0,mem=20,disk=1"));
-    emitter.complete();
-    return emitter;
+  @GetMapping(path = "/{jobId}/containers/metrics")
+  public SseEmitter monitorContainerMetrics(@PathVariable UUID jobId) {
+    return metricsSseService.subscribeMetrics(jobId);
   }
 
   @Operation(summary = "지정한 Job을 수동으로 시작")

@@ -100,7 +100,7 @@ sequenceDiagram
 
     Note over Client,API: ✅ 클라이언트는 특정 Job ID 기준으로<br/>컨테이너 모니터링을 구독한다.
 
-    Client->>API: GET /api/jobs/{jobId}/containers/monitor (SSE 연결)
+    Client->>API: GET /api/jobs/{jobId}/containers/metrics (SSE 연결)
     API->>Redis: XREAD metrics:job:{jobId} FROM last_id
     Redis-->>API: Stream data (container metrics event)
     API-->>Client: SSE event {containerId, status, startAt, endAt,<br/>cpuUsage, gpuUsage, memoryUsage, diskUsage}

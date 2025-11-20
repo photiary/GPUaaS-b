@@ -38,7 +38,7 @@ public class RedisStreamTransporter<T> implements Transporter<T> {
         try {
             MapRecord<String, String, String> record = MapRecord.create(key, Map.of("data", payload));
             var recordId = redisTemplate.opsForStream().add(record);
-            log.debug("XADD to RedisStream done. key={}, recordId={}, bytes={}", key, recordId, payload.length());
+            log.debug("XADD to RedisStream done. key={}, recordId={}, payload={}", key, recordId, payload);
         } catch (Exception e) {
             log.warn("Failed to XADD to RedisStream. Falling back to log. key={}, data={}", key, payload, e);
             log.info("[RedisFallback] XADD {} data={{data:{}}}", key, payload);

@@ -10,6 +10,7 @@ import com.funa.agents.state.AppStateMonitorAgent;
 import com.funa.agents.state.StateMonitorAgent;
 import com.funa.common.transport.RedisStreamTransporter;
 import com.funa.common.transport.Transporter;
+import com.funa.containers.ContainerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,8 +62,9 @@ public class AgentsConfig {
     @Bean
     public MetricsCollectorAgent metricsCollectorAgent(SystemCollector sys, GPUCollector gpu,
                                                        Aggregator aggregator,
-                                                       Transporter<List<com.funa.agents.metrics.MetricsData>> transporter) {
-        return new MetricsCollectorAgent(sys, gpu, aggregator, transporter);
+                                                       Transporter<List<com.funa.agents.metrics.MetricsData>> transporter,
+                                                       ContainerRepository containerRepository) {
+        return new MetricsCollectorAgent(sys, gpu, aggregator, transporter, containerRepository);
     }
 
     @Bean
