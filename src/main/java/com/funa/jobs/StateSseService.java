@@ -2,11 +2,11 @@ package com.funa.jobs;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.funa.agents.metrics.MetricsCollectorAgent;
+import com.funa.agents.state.AppStateMonitorAgent;
 import org.springframework.data.redis.connection.stream.ReadOffset;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.connection.stream.StreamReadOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -18,43 +18,43 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * SSE 서비스: Redis Stream(metrics:job:{jobId})을 블로킹으로 구독하여 클라이언트로 전달.
+ * SSE 서비스: Redis Stream(state:job:{jobId})을 블로킹으로 구독하여 클라이언트로 전달.
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MetricsSseService {
+public class StateSseService {
 
     private final StringRedisTemplate redisTemplate;
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
     private String streamKey(UUID jobId) {
-        return MetricsCollectorAgent.STREAM_KEY_PREFIX + ":" + jobId;
+        return AppStateMonitorAgent.STREAM_KEY_PREFIX + ":" + jobId;
     }
 
-    public SseEmitter subscribeMetrics(UUID jobId) {
-        SseEmitter emitter = new SseEmitter(0L); // never timeout from server side
+    public SseEmitter subscribeStates(UUID jobId) {
+        SseEmitter emitter = new SseEmitter(0L); // 서버에서 타임아웃 없음
         String key = streamKey(jobId);
         AtomicBoolean active = new AtomicBoolean(true);
 
         emitter.onTimeout(() -> {
             active.set(false);
-            log.info("SSE timeout for jobId={}", jobId);
+            log.info("State SSE timeout for jobId={}", jobId);
         });
         emitter.onError(ex -> {
             active.set(false);
-            log.warn("SSE error for jobId={}: {}", jobId, ex.toString());
+            log.warn("State SSE error for jobId={}: {}", jobId, ex.toString());
         });
         emitter.onCompletion(() -> {
             active.set(false);
-            log.info("SSE completed for jobId={}", jobId);
+            log.info("State SSE completed for jobId={}", jobId);
         });
 
         // 최초 연결 확인용 ping
         try {
             emitter.send(SseEmitter.event().name("ping").data("ok"));
         } catch (IOException e) {
-            log.warn("Failed to send initial ping for jobId={}", jobId, e);
+            log.warn("Failed to send initial ping (state) for jobId={}", jobId, e);
         }
 
         executor.submit(() -> consumeLoop(key, emitter, active));
@@ -65,7 +65,7 @@ public class MetricsSseService {
     private void consumeLoop(String key, SseEmitter emitter, AtomicBoolean active) {
         var ops = redisTemplate.opsForStream();
         String lastId = null;
-        log.info("Start consuming Redis Stream key={}", key);
+        log.info("Start consuming Redis Stream (state) key={}", key);
         while (active.get()) {
             try {
                 var options = StreamReadOptions.empty().block(java.time.Duration.ofSeconds(10)).count(10);
@@ -87,23 +87,23 @@ public class MetricsSseService {
                     String payload = String.valueOf(val);
                     try {
                         emitter.send(SseEmitter.event()
-                                .name("metrics")
+                                .name("state")
                                 .id(record.getId().getValue())
                                 .data(payload)
                         );
                     } catch (IOException e) {
-                        log.warn("Failed to send SSE for key={}, id={}", key, record.getId(), e);
+                        log.warn("Failed to send State SSE for key={}, id={}", key, record.getId(), e);
                         active.set(false);
                         break;
                     }
                 }
             } catch (Exception e) {
-                log.warn("Error while reading Redis Stream key={}", key, e);
+                log.warn("Error while reading Redis Stream (state) key={}", key, e);
                 // 잠시 대기 후 재시도
                 try { Thread.sleep(1000L); } catch (InterruptedException ignored) { }
             }
         }
         try { emitter.complete(); } catch (Exception ignored) {}
-        log.info("Stop consuming Redis Stream key={}", key);
+        log.info("Stop consuming Redis Stream (state) key={}", key);
     }
 }

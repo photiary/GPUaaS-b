@@ -33,7 +33,7 @@ public class AgentsConfig {
     public Transporter<List<com.funa.agents.metrics.MetricsData>> metricsTransporter() {
         RedisStreamTransporter<List<com.funa.agents.metrics.MetricsData>> t =
                 new RedisStreamTransporter<>(objectMapper, stringRedisTemplate);
-        t.setStreamKeyPrefix("metrics:job");
+        t.setStreamKeyPrefix(com.funa.agents.metrics.MetricsCollectorAgent.STREAM_KEY_PREFIX);
         return t;
     }
 
@@ -41,7 +41,7 @@ public class AgentsConfig {
     public Transporter<com.funa.agents.state.JobStateData> stateTransporter() {
         RedisStreamTransporter<com.funa.agents.state.JobStateData> t =
                 new RedisStreamTransporter<>(objectMapper, stringRedisTemplate);
-        t.setStreamKeyPrefix("state:job");
+        t.setStreamKeyPrefix(com.funa.agents.state.AppStateMonitorAgent.STREAM_KEY_PREFIX);
         return t;
     }
 
@@ -69,8 +69,9 @@ public class AgentsConfig {
 
     @Bean
     public AppStateMonitorAgent appStateMonitorAgent(AppContainerStateCollector collector,
-                                                     Transporter<com.funa.agents.state.JobStateData> transporter) {
-        return new AppStateMonitorAgent(collector, transporter);
+                                                     Transporter<com.funa.agents.state.JobStateData> transporter,
+                                                     ContainerRepository containerRepository) {
+        return new AppStateMonitorAgent(collector, transporter, containerRepository);
     }
 
     @Bean

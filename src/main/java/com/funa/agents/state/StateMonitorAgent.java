@@ -34,7 +34,9 @@ public class StateMonitorAgent {
     @Transactional(readOnly = true)
     protected List<String> getActiveJobIds() {
         try {
-            return jobRepository.findIdsByStatus(Job.Status.RUNNING).stream()
+            // 모든 Job의 ID를 조회하도록 수정
+            return jobRepository.findAll().stream()
+                    .map(Job::getId)
                     .map(java.util.UUID::toString)
                     .collect(Collectors.toList());
         } catch (Exception e) {
@@ -44,7 +46,7 @@ public class StateMonitorAgent {
     }
 
     protected void dispatchJobMonitoring(String jobId) {
-        // Minimal stub container list. Real impl would resolve containers by job.
-        appStateMonitorAgent.start(jobId, Collections.emptyList());
+        // 컨테이너 목록을 저장소에서 조회하도록 AppStateMonitorAgent가 처리
+        appStateMonitorAgent.start(jobId);
     }
 }

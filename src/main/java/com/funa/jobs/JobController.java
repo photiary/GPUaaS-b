@@ -21,10 +21,12 @@ public class JobController {
 
   private final JobService jobService;
   private final MetricsSseService metricsSseService;
+  private final StateSseService stateSseService;
 
-  public JobController(JobService jobService, MetricsSseService metricsSseService) {
+  public JobController(JobService jobService, MetricsSseService metricsSseService, StateSseService stateSseService) {
     this.jobService = jobService;
     this.metricsSseService = metricsSseService;
+    this.stateSseService = stateSseService;
   }
 
   @Operation(summary = "새 Job 생성")
@@ -84,11 +86,8 @@ public class JobController {
 
   @Operation(summary = "특정 Job의 컨테이너 상태 실시간 모니터링 (SSE)")
   @GetMapping("/{jobId}/containers/state")
-  public SseEmitter monitorContainerState(@PathVariable UUID jobId) throws IOException {
-    SseEmitter emitter = new SseEmitter(0L);
-    emitter.send(SseEmitter.event().name("state").data("READY"));
-    emitter.complete();
-    return emitter;
+  public SseEmitter monitorContainerState(@PathVariable UUID jobId) {
+    return stateSseService.subscribeStates(jobId);
   }
 
   @Operation(summary = "특정 Job의 컨테이너 메트릭스 실시간 모니터링 (SSE)")

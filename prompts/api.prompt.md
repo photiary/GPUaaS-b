@@ -65,7 +65,7 @@ Redis stream 사용
 - Memory 크기
 - Disk 크기
 
-## 🎈 App container list metrics monitoring by job(SSE)
+## [x] 🎈 App container list metrics monitoring by job(SSE)
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
@@ -142,7 +142,7 @@ Redis steam 사용
     - 실행 시작 시각
     - 완료 시각
 
-## 🎈 Job 수동제어
+## [x] 🎈 Job 수동제어
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
@@ -151,7 +151,7 @@ Redis steam 사용
 
 # 🧩 App Container
 
-## 🎈 App container CRUD
+## [x] 🎈 App container CRUD
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
@@ -162,7 +162,7 @@ Redis steam 사용
 
 # 🧩 Resource Node
 
-## 🎈 Resource node CRUD
+## [x] 🎈 Resource node CRUD
 
 | Method | Endpoint | Description |
 | --- | --- | --- |

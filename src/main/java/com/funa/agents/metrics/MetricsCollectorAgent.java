@@ -14,6 +14,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MetricsCollectorAgent {
 
+    /**
+     * Redis Stream key prefix used by this agent to publish metrics.
+     * Example final key: metrics:job:{jobId}
+     */
+    public static final String STREAM_KEY_PREFIX = "metrics:job";
+
     private final Collector systemCollector;
     private final Collector gpuCollector;
     private final Aggregator aggregator;
