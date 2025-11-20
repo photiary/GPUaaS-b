@@ -104,7 +104,6 @@ public class JobController {
   public ResponseEntity<JobResponse> start(@PathVariable UUID jobId) {
     JobResponse res = JobResponse.builder()
         .id(jobId)
-        .name("demo-job")
         .status("RUNNING")
         .startTime(OffsetDateTime.now())
         .build();
@@ -116,7 +115,6 @@ public class JobController {
   public ResponseEntity<JobResponse> stop(@PathVariable UUID jobId) {
     JobResponse res = JobResponse.builder()
         .id(jobId)
-        .name("demo-job")
         .status("STOPPED")
         .endTime(OffsetDateTime.now())
         .build();

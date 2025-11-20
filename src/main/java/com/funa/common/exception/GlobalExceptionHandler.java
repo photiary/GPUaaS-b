@@ -31,6 +31,15 @@ public class GlobalExceptionHandler {
   }
 
   /**
+   * Handles IllegalArgumentException as a client error (400 Bad Request).
+   */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    logger.warn("Bad request: {}", ex.getMessage());
+    return buildErrorResponse(ex, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
    * Handles Exception and its subclasses.
    *
    * @param ex The exception to handle

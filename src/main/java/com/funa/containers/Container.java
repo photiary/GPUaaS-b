@@ -25,8 +25,8 @@ public class Container {
   @Column(name = "id", nullable = false, updatable = false)
   private UUID id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "job_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = true)
+  @JoinColumn(name = "job_id", nullable = true)
   private Job job;
 
   @ManyToOne(fetch = FetchType.LAZY)
