@@ -98,8 +98,6 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
 - **Unit test & Local environment test:** Use H2 Database.
 - **Develop environment test:** Use PostgresSQL Database.
 
-## Unit Test
-
 ## Logs
 
 - **Log content:** timestamp, log level, transaction ID(Trace ID), user ID
