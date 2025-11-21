@@ -46,13 +46,13 @@
 
 # 🧩 App Container Edge
 
-| 필드 | 타입 | 설명 |
-| --- | --- | --- |
-| `id` | UUID | 엣지 식별자 |
-| `job_id` | UUID (FK → Job) | 상위 Job |
-| `source_node_id` | UUID (FK → App Container Node) | 시작 노드 |
-| `target_node_id` | UUID (FK → App Container Node) | 도착 노드 |
-| `edge_key` | VARCHAR | ReactFlow용 ID (ex: `"edge-1-2"`) |
+| 필드 | 타입 | 설명                                  |
+| --- | --- |-------------------------------------|
+| `id` | UUID | 엣지 식별자                              |
+| `job_id` | UUID (FK → Job) | 상위 Job                              |
+| `source_container_id` | UUID (FK → App Container Node) | 시작 컨테이너 노드                          |
+| `target_container_id` | UUID (FK → App Container Node) | 도착 컨테이너 노드                          |
+| `edge_key` | VARCHAR | ReactFlow용 ID (ex: `"edge-1-2"`)    |
 | `label` | VARCHAR | Edge에 표시할 설명 (ex: "output → input") |
-| `condition` | JSON | 실행 조건 (예: 성공 시만 실행, 특정 변수 등) |
-| `is_active` | BOOLEAN | 활성/비활성 여부 |
+| `condition` | JSON | 실행 조건 (예: 성공 시만 실행, 특정 변수 등)        |
+| `is_active` | BOOLEAN | 활성/비활성 여부                           |

@@ -27,12 +27,12 @@ public class ContainerEdge {
   private Job job;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "source_node_id", nullable = false)
-  private Container sourceNode;
+  @JoinColumn(name = "source_container_id", nullable = false)
+  private Container sourceContainer;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "target_node_id", nullable = false)
-  private Container targetNode;
+  @JoinColumn(name = "target_container_id", nullable = false)
+  private Container targetContainer;
 
   @Column(name = "edge_key", length = 255, nullable = false)
   private String edgeKey;

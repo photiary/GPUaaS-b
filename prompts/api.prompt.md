@@ -149,6 +149,16 @@ Redis steam 사용
 | `POST` | `/api/jobs/{jobId}/start` | 지정한 Job을 수동으로 시작 |
 | `POST` | `/api/jobs/{jobId}/stop` | 실행 중인 Job을 수동으로 중지 |
 
+## 🎈 Container Edge CRUD
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/api/jobs/{jobId}/edges` | 컨테이너 엣지 등록 |
+| `GET` | `/api/jobs/{jobId}/edges` | 컨테이너 엣지 목록 조회 |
+| `GET` | `/api/jobs/{jobId}/edges/{edgeId}` | 컨테이너 엣지 상세 조회 |
+| `PUT` | `/api/jobs/{jobId}/edges/{edgeId}` | 컨테이너 엣지 수정 |
+| `DELETE` | `/api/jobs/{jobId}/edges/{edgeId}` | 컨테이너 엣지 삭제 |
+
 # 🧩 App Container
 
 ## [x] 🎈 App container CRUD

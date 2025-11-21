@@ -1,5 +1,8 @@
 package com.funa.jobs;
 
+import com.funa.containers.ContainerEdgeService;
+import com.funa.containers.dto.ContainerEdgeRequest;
+import com.funa.containers.dto.ContainerEdgeResponse;
 import com.funa.jobs.dto.JobRequest;
 import com.funa.jobs.dto.JobResponse;
 import com.funa.jobs.dto.SimpleContainerResponse;
@@ -22,11 +25,13 @@ public class JobController {
   private final JobService jobService;
   private final MetricsSseService metricsSseService;
   private final StateSseService stateSseService;
+  private final ContainerEdgeService containerEdgeService;
 
-  public JobController(JobService jobService, MetricsSseService metricsSseService, StateSseService stateSseService) {
+  public JobController(JobService jobService, MetricsSseService metricsSseService, StateSseService stateSseService, ContainerEdgeService containerEdgeService) {
     this.jobService = jobService;
     this.metricsSseService = metricsSseService;
     this.stateSseService = stateSseService;
+    this.containerEdgeService = containerEdgeService;
   }
 
   @Operation(summary = "새 Job 생성")
@@ -110,5 +115,47 @@ public class JobController {
     return jobService.stop(jobId)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  // ================= Container Edge CRUD =================
+
+  @Operation(summary = "컨테이너 엣지 등록")
+  @PostMapping("/{jobId}/edges")
+  public ResponseEntity<ContainerEdgeResponse> createEdge(
+      @PathVariable UUID jobId,
+      @Validated @RequestBody ContainerEdgeRequest request) {
+    return ResponseEntity.ok(containerEdgeService.create(jobId, request));
+  }
+
+  @Operation(summary = "컨테이너 엣지 목록 조회")
+  @GetMapping("/{jobId}/edges")
+  public ResponseEntity<List<ContainerEdgeResponse>> listEdges(@PathVariable UUID jobId) {
+    return ResponseEntity.ok(containerEdgeService.list(jobId));
+  }
+
+  @Operation(summary = "컨테이너 엣지 상세 조회")
+  @GetMapping("/{jobId}/edges/{edgeId}")
+  public ResponseEntity<ContainerEdgeResponse> getEdge(@PathVariable UUID jobId, @PathVariable UUID edgeId) {
+    return containerEdgeService.get(jobId, edgeId)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @Operation(summary = "컨테이너 엣지 수정")
+  @PutMapping("/{jobId}/edges/{edgeId}")
+  public ResponseEntity<ContainerEdgeResponse> updateEdge(
+      @PathVariable UUID jobId,
+      @PathVariable UUID edgeId,
+      @Validated @RequestBody ContainerEdgeRequest request) {
+    return containerEdgeService.update(jobId, edgeId, request)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @Operation(summary = "컨테이너 엣지 삭제")
+  @DeleteMapping("/{jobId}/edges/{edgeId}")
+  public ResponseEntity<Void> deleteEdge(@PathVariable UUID jobId, @PathVariable UUID edgeId) {
+    containerEdgeService.delete(jobId, edgeId);
+    return ResponseEntity.noContent().build();
   }
 }
