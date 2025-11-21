@@ -5,6 +5,7 @@ import com.funa.nodes.dto.NodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +26,12 @@ public class NodeController {
   @PostMapping
   public ResponseEntity<NodeResponse> create(@Validated @RequestBody NodeRequest req) {
     return ResponseEntity.ok(nodeService.create(req));
+  }
+
+  @Operation(summary = "리소스 노드 목록 조회")
+  @GetMapping
+  public ResponseEntity<List<NodeResponse>> list() {
+    return ResponseEntity.ok(nodeService.findAll());
   }
 
   @Operation(summary = "리소스 노드 상세 조회")

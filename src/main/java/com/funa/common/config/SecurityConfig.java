@@ -16,8 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   /**
-   * Configures the security filter chain. Allows access to /api/demo/** without authentication.
-   * Requires authentication for all other endpoints.
+   * Configures the security filter chain. Allows access to /api/demo/** and Swagger without
+   * authentication. Requires authentication for all other endpoints.
    *
    * @param http the HttpSecurity to configure
    * @return the configured SecurityFilterChain

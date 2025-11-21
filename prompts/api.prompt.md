@@ -164,9 +164,10 @@ Redis steam 사용
 
 ## [x] 🎈 Resource node CRUD
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `/api/nodes` | 리소스 노드 등록 |
-| `GET` | `/api/nodes/{nodeId}` | 리소스 노드 상세 조회 |
-| `PUT` | `/api/nodes/{nodeId}` | 리소스 노드 수정 |
+| Method   | Endpoint | Description |
+|----------| --- | --- |
+| `POST`   | `/api/nodes` | 리소스 노드 등록 |
+| `GET`    | `/api/nodes` | 리소스 노드 목록 조회 |
+| `GET`    | `/api/nodes/{nodeId}` | 리소스 노드 상세 조회 |
+| `PUT`    | `/api/nodes/{nodeId}` | 리소스 노드 수정 |
 | `DELETE` | `/api/nodes/{nodeId}` | 리소스 노드 삭제 |
