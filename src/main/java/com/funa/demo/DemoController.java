@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/demo")
-@Tag(name = "Demo", description = "Demo API for logging functionality demonstration")
+@Tag(name = "demo", description = "Demo API for logging functionality demonstration")
 public class DemoController {
 
     private static final Logger logger = LoggerFactory.getLogger(DemoController.class);

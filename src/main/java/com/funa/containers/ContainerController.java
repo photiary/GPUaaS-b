@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/containers")
-@Tag(name = "App Container", description = "컨테이너 관리 API")
+@Tag(name = "container", description = "컨테이너 관리 API")
 public class ContainerController {
 
   private final ContainerService containerService;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/nodes")
-@Tag(name = "Resource Node", description = "리소스 노드 관리 API")
+@Tag(name = "node", description = "리소스 노드 관리 API")
 public class NodeController {
 
   private final NodeService nodeService;

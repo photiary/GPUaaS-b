@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/jobs")
-@Tag(name = "Jobs", description = "Job 관리 및 모니터링 API")
+@Tag(name = "job", description = "Job 관리 및 모니터링 API")
 public class JobController {
 
   private final JobService jobService;
