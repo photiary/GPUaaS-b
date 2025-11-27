@@ -19,4 +19,9 @@ public interface ContainerRepository extends JpaRepository<Container, UUID> {
      */
     @Query("select c.id from Container c where c.job.id = :jobId")
     List<UUID> findIdsByJobId(@Param("jobId") UUID jobId);
+
+    /**
+     * Returns all containers belonging to the given job.
+     */
+    List<Container> findAllByJobId(UUID jobId);
 }

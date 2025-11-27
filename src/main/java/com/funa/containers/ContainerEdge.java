@@ -34,7 +34,7 @@ public class ContainerEdge {
   @JoinColumn(name = "target_container_id", nullable = false)
   private Container targetContainer;
 
-  @Column(name = "edge_key", length = 255, nullable = false)
+  @Column(name = "edge_key", length = 255)
   private String edgeKey;
 
   @Column(name = "label", length = 255)

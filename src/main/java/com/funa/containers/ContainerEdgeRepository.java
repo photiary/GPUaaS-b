@@ -11,4 +11,6 @@ public interface ContainerEdgeRepository extends JpaRepository<ContainerEdge, UU
   List<ContainerEdge> findByJob_Id(UUID jobId);
   Optional<ContainerEdge> findByIdAndJob_Id(UUID id, UUID jobId);
   void deleteByIdAndJob_Id(UUID id, UUID jobId);
+  void deleteBySourceContainer_Id(UUID containerId);
+  void deleteByTargetContainer_Id(UUID containerId);
 }

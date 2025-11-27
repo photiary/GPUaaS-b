@@ -1,6 +1,7 @@
 package com.funa.jobs;
 
 import com.funa.containers.ContainerEdgeService;
+import com.funa.containers.ContainerService;
 import com.funa.containers.dto.ContainerEdgeRequest;
 import com.funa.containers.dto.ContainerEdgeResponse;
 import com.funa.jobs.dto.JobRequest;
@@ -26,12 +27,14 @@ public class JobController {
   private final MetricsSseService metricsSseService;
   private final StateSseService stateSseService;
   private final ContainerEdgeService containerEdgeService;
+  private final ContainerService containerService;
 
-  public JobController(JobService jobService, MetricsSseService metricsSseService, StateSseService stateSseService, ContainerEdgeService containerEdgeService) {
+  public JobController(JobService jobService, MetricsSseService metricsSseService, StateSseService stateSseService, ContainerEdgeService containerEdgeService, ContainerService containerService) {
     this.jobService = jobService;
     this.metricsSseService = metricsSseService;
     this.stateSseService = stateSseService;
     this.containerEdgeService = containerEdgeService;
+    this.containerService = containerService;
   }
 
   @Operation(summary = "새 Job 생성")
@@ -82,10 +85,12 @@ public class JobController {
   @Operation(summary = "특정 Job의 컨테이너 목록 조회")
   @GetMapping("/{jobId}/containers")
   public ResponseEntity<List<SimpleContainerResponse>> listContainers(@PathVariable UUID jobId) {
-    List<SimpleContainerResponse> list = new ArrayList<>();
-    list.add(SimpleContainerResponse.builder()
-        .id(UUID.randomUUID()).label("container-1").gpuCores(1).cpuCores(2).memoryMb(2048).diskGb(10)
-        .build());
+    List<SimpleContainerResponse> list = containerService.listByJobId(jobId).stream()
+        .map(c -> SimpleContainerResponse.builder()
+            .id(c.getId())
+            .label(c.getLabel())
+            .build())
+        .toList();
     return ResponseEntity.ok(list);
   }
 

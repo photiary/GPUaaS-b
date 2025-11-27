@@ -1,7 +1,11 @@
 package com.funa.jobs;
 
+import com.funa.containers.Container;
+import com.funa.containers.ContainerEdge;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -70,6 +74,16 @@ public class Job {
 
   @Column(name = "updated_id")
   private String updatedId;
+
+  @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @Builder.Default
+  @ToString.Exclude
+  private List<Container> containers = new ArrayList<>();
+
+  @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @Builder.Default
+  @ToString.Exclude
+  private List<ContainerEdge> containerEdges = new ArrayList<>();
 
   @PrePersist
   protected void onCreate() {

@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class ContainerService {
   private final ContainerRepository repository;
   private final JobRepository jobRepository;
   private final NodeRepository nodeRepository;
+  private final ContainerEdgeRepository containerEdgeRepository;
 
   public ContainerResponse create(ContainerRequest request) {
     Container entity = toEntityForCreate(request);
@@ -34,6 +36,10 @@ public class ContainerService {
     return repository.findAll().stream().map(this::toResponse).toList();
   }
 
+  public List<ContainerResponse> listByJobId(UUID jobId) {
+    return repository.findAllByJobId(jobId).stream().map(this::toResponse).toList();
+  }
+
   public Optional<ContainerResponse> update(UUID id, ContainerRequest request) {
     return repository.findById(id).map(existing -> {
       applyUpdate(existing, request);
@@ -42,7 +48,10 @@ public class ContainerService {
     });
   }
 
+  @Transactional
   public void delete(UUID id) {
+    containerEdgeRepository.deleteBySourceContainer_Id(id);
+    containerEdgeRepository.deleteByTargetContainer_Id(id);
     repository.deleteById(id);
   }
 
