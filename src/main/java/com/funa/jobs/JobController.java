@@ -4,6 +4,7 @@ import com.funa.containers.ContainerEdgeService;
 import com.funa.containers.ContainerService;
 import com.funa.containers.dto.ContainerEdgeRequest;
 import com.funa.containers.dto.ContainerEdgeResponse;
+import com.funa.containers.dto.ContainerResponse;
 import com.funa.jobs.dto.JobRequest;
 import com.funa.jobs.dto.JobResponse;
 import com.funa.jobs.dto.SimpleContainerResponse;
@@ -84,13 +85,8 @@ public class JobController {
 
   @Operation(summary = "특정 Job의 컨테이너 목록 조회")
   @GetMapping("/{jobId}/containers")
-  public ResponseEntity<List<SimpleContainerResponse>> listContainers(@PathVariable UUID jobId) {
-    List<SimpleContainerResponse> list = containerService.listByJobId(jobId).stream()
-        .map(c -> SimpleContainerResponse.builder()
-            .id(c.getId())
-            .label(c.getLabel())
-            .build())
-        .toList();
+  public ResponseEntity<List<ContainerResponse>> listContainers(@PathVariable UUID jobId) {
+    List<ContainerResponse> list = containerService.listByJobId(jobId);
     return ResponseEntity.ok(list);
   }
 

@@ -28,7 +28,7 @@ public class SchedulerTasks {
     /**
      * 주기적으로 전체 Job 상태 모니터링을 수행 (StateMonitorAgent)
      */
-    @Scheduled(fixedDelayString = "${agents.state.fixed-delay:1000000}")
+    @Scheduled(fixedDelayString = "${agents.state.fixed-delay:10000000}")
     public void scheduleStateMonitoring() {
         log.trace("[Scheduler] scheduleStateMonitoring tick");
         stateMonitorAgent.startAll();
@@ -38,7 +38,7 @@ public class SchedulerTasks {
      * 주기적으로 RUNNING Job의 메트릭 수집을 수행 (MetricsCollectorAgent)
      * 현재는 컨테이너 ID를 별도 저장소에서 조회하지 않아 빈 리스트로 전달합니다.
      */
-    @Scheduled(fixedDelayString = "${agents.metrics.fixed-delay:1000000}")
+    @Scheduled(fixedDelayString = "${agents.metrics.fixed-delay:1000}")
     @Transactional(readOnly = true)
     public void scheduleMetricsCollection() {
         log.trace("[Scheduler] scheduleMetricsCollection tick");
